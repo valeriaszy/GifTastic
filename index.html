@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Favorite Fandom Ships</title>
+</head>
+
+<body>
+    <button data-ships="Chuck and Blair:Chair">Chuck and Blair</button>
+    <button data-ships="Alec and Magnus:Malec">Magnus and Alec</button>
+
+
+    <button data-ships="Rachel and Finn:Finchel">
+        Finchel
+    </button>
+    <button data-ships="Lydia and Styles:Stydia">
+        Stydia
+    </button>
+    <button data-ships="Oliver and Felicity:Olicity">
+        Olicity
+    </button>
+
+    <div id="gifs-appear-here">
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript">
+
+        $("button").on("click", function () {
+
+            var ships = $(this).attr("data-ships");
+
+
+            var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
+                ships + "bQ1jsXLk8xuWqtgjQQtCUhIyacVaN5yU";
+
+
+            $.ajax({
+                url: queryURL,
+                method: "GET"
+            })
+
+                .then(function (response) {
+
+                    var results = response.data;
+
+
+                    for (var i = 0; i < results.length; i++) {
+
+
+                        if (results[i].rating !== "r" && results[i].rating !== "pg-13") {
+
+                            var gifDiv = $("<div>");
+
+
+                            var rating = results[i].rating;
+
+
+                            var p = $("<p>").text("Rating: " + rating);
+
+
+                            var shipImage = $("<img>");
+
+
+                            shipImage.attr("src", results[i].images.fixed_height.url);
+
+
+                            gifDiv.append(p);
+                            gifDiv.append(shipImage);
+
+
+                            $("#gifs-appear-here").prepend(gifDiv);
+                        }
+                    }
+                });
+        });
+    </script>
+</body>
+
+</html>
